@@ -64,7 +64,7 @@ module.exports = Generators.Base.extend({
                 if (this.ymlApi) {
                     apiContent = JsYaml.dump(this.refApi);
                 } else {
-                    apiContent = JSON.stringify(this.refApi, null, 4);
+                    apiContent = JSON.stringify(this.refApi, null, '\t');
                 }
                 this.write(this.apiConfigPath, apiContent);
             }
