@@ -30,5 +30,6 @@ module.exports = {
 		}<%if (i < operation.responses.length - 1) {%>,
 		<%}%><%})%>
 	}<%if (i < operations.length - 1) {%>,
+
 	<%}%><%});%>
 };

@@ -36,5 +36,6 @@ module.exports = {
 		reply(data).code(status);
 		<%}%>
 	}<%if (i < operations.length - 1) {%>,
+
 	<%}%><%});%>
 };

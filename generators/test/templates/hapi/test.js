@@ -31,9 +31,10 @@ Test('<%=path%>', (t) => {
 				t.error(err, 'No error.');
 			});
 		});
-		<%operations.forEach((operation, i) => {
-			const mt = operation.method.toLowerCase();
-		%>/**
+<%operations.forEach((operation, i) => {
+	const mt = operation.method.toLowerCase();
+%>
+		/**
 		 * summary: <%=operation.summary%>
 		 * description: <%=operation.description%>
 		 * parameters: <%=operation.parameters%>
@@ -80,6 +81,6 @@ Test('<%=path%>', (t) => {
 					<%}%>t.end();
 				});
 			});
-		});<%})%>
-	});
+		});
+<%})%>	});
 });
