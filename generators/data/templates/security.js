@@ -5,7 +5,7 @@
 * type: <%=type%>
 * description: <%=description%>
 */
-module.exports = function authorize(req, res, next) {
+module.exports = (request, response, next) => {
 	// The context('this') for authorize will be bound to the 'securityDefinition'
 	<%if (type === 'oauth2') {
 	%>// this.authorizationUrl - The authorization URL for securityDefinitions:<%=name%>

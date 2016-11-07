@@ -8,14 +8,14 @@ const Mockgen = require('<%=mockgenPath.replace(/\\/g,'/')%>');
 const Parser = require('swagger-parser');
 
 /**
- * Test for <%=path%>
- */
+* Test for <%=path%>
+*/
 Test('<%=path%>', (t) => {
-	const apiPath = Path.resolve(__dirname, '<%=apiPathRel.replace(/\\/g,'/')%>');
+	const api_path = Path.resolve(__dirname, '<%=apiPathRel.replace(/\\/g,'/')%>');
 	let server;
 
-	Parser.validate(apiPath, (err, api) => {
-		t.error(err, 'No parse error');
+	Parser.validate(api_path, (error, api) => {
+		t.error(error, 'No parse error');
 		t.ok(api, 'Valid swagger api');
 		t.test('server', (t) => {
 			t.plan(1);
@@ -24,30 +24,30 @@ Test('<%=path%>', (t) => {
 			server.register({
 				register: Swaggerize,
 				options: {
-					api: apiPath,
+					api: api_path,
 					handlers: Path.join(__dirname, '<%=handlerDir.replace(/\\/g,'/')%>')
 				}
-			}, (err) => {
-				t.error(err, 'No error.');
+			}, (error) => {
+				t.error(error, 'No error.');
 			});
 		});
 <%operations.forEach((operation, i) => {
 	const mt = operation.method.toLowerCase();
 %>
 		/**
-		 * summary: <%=operation.summary%>
-		 * description: <%=operation.description%>
-		 * parameters: <%=operation.parameters%>
-		 * produces: <%=operation.produces%>
-		 * responses: <%=operation.responses.join(', ')%>
-		 */
+		* summary: <%=operation.summary%>
+		* description: <%=operation.description%>
+		* parameters: <%=operation.parameters%>
+		* produces: <%=operation.produces%>
+		* responses: <%=operation.responses.join(', ')%>
+		*/
 		t.test('test <%=operation.name%> <%=operation.method%> operation', (t) => {
 			Mockgen().requests({
 				path: '<%=path%>',
 				operation: '<%=operation.method%>'
-			}, (err, mock) => {
+			}, (error, mock) => {
 				let options;
-				t.error(err);
+				t.error(error);
 				t.ok(mock);
 				t.ok(mock.request);
 				// Get the resolved path from mock request
@@ -70,13 +70,13 @@ Test('<%=path%>', (t) => {
 				if (mock.request.headers && mock.request.headers.length > 0) {
 					options.headers = mock.request.headers;
 				}
-				server.inject(options, (res) => {
+				server.inject(options, (response) => {
 					<% if (operation.response) {
-					%>t.ok(res.statusCode === <%=(operation.response === 'default')?200:operation.response%>, 'Ok response status');<%}%>
+					%>t.equal(response.statusCode, <%=(operation.response === 'default')?200:operation.response%>, 'Ok response status');<%}%>
 					<% if (operation.validateResp) {
 					%>const Validator = require('is-my-json-valid');
 					const validate = Validator(api.paths['<%=path%>']['<%=operation.method%>']['responses']['<%=operation.response%>']['schema']);
-					t.ok(validate(res.result || res.payload), 'Valid response');
+					t.ok(validate(response.result || response.payload), 'Valid response');
 					t.error(validate.errors, 'No validation errors');
 					<%}%>t.end();
 				});

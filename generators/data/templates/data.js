@@ -3,8 +3,8 @@
 const Mockgen = require('<%=mockgenPath.replace(/\\/g,'/')%>');
 
 /**
- * Operations on <%=path%>
- */
+* Operations on <%=path%>
+*/
 module.exports = {
 	<%operations.forEach(function (operation, i)
 	{%>/**
@@ -16,8 +16,8 @@ module.exports = {
 	* operationId: <%=operation.name%>
 	*/
 	<%=operation.method%>: {
-		<%operation.responses && operation.responses.forEach((response, i) =>
-			{%><%=response%>: (req, res, callback) => {
+		<%operation.responses && operation.responses.forEach((resp, i) =>
+			{%><%=resp%>: (request, response, callback) => {
 			/**
 			* Using mock data generator module.
 			* Replace this by actual data for the api.
@@ -25,7 +25,7 @@ module.exports = {
 			Mockgen().responses({
 				path: '<%=path%>',
 				operation: '<%=operation.method%>',
-				response: '<%=response%>'
+				response: '<%=resp%>'
 			}, callback);
 		}<%if (i < operation.responses.length - 1) {%>,
 		<%}%><%})%>
